@@ -1,54 +1,48 @@
 class Tennis
+  SCORE = {
+    0 => 'love',
+    1 => '15',
+    2 => '30',
+    4 => '40'
+  }.freeze
+
   def initialize
     @hash = Hash.new(0)
+    @hash = {
+      A: 0,
+      B: 0
+    }
   end
 
   # What is the current score ?
   def score
-    if @hash.empty?
-      'love all'
-    elsif @hash[:A] == 1 && @hash[:B] == 1
-      '15 all'
-    elsif @hash[:A] == 2 && @hash[:B] == 2
-      '30 all'
-    elsif @hash[:A] == 3 && @hash[:B] == 3
+    if SCORE[@hash[:A]] == SCORE[@hash[:B]] && @hash[:B] <= 2
+      SCORE[@hash[:B]] + ' all'
+    elsif @hash[:B] == @hash[:A] && @hash[:A] == 3
       'Deuce'
-    elsif @hash[:A] >= 3 && @hash[:B] >= 3 && @hash[:A] > @hash[:B]
+    elsif  @hash[:A] > @hash[:B] && @hash[:B] >= 3
       'Advantage Server'
-    elsif @hash[:B] >= 3 && @hash[:B] >= 3 && @hash[:A] < @hash[:B]
-      'Advantage Reciever'
-    elsif @hash[:A] == 1 && @hash.keys.count == 1
-      '15 love'
-    elsif @hash[:A] == 2 && @hash.keys.count == 1
-      '30 love'
-    elsif @hash[:A] == 3 && @hash.keys.count == 1
-      '40 love'
-    elsif @hash[:A] == 4 && @hash.keys.count == 1
-      'Game To Server'
-    elsif @hash[:B] == 1 && @hash.keys.count == 1
-      'love 15'
-    elsif @hash[:B] == 2 && @hash.keys.count == 1
-      'love 30'
-    elsif @hash[:B] == 3 && @hash.keys.count == 1
-      '40 love'
-    elsif @hash[:B] == 4 && @hash.keys.count == 1
-      'Game To Receiver'
+    elsif  @hash[:A] < @hash[:B] && @hash[:A] >= 3
+      'Advantage Receiver'
+    elsif @hash[:B] > @hash[:A] + 1 && @hash[:B] > 3
+      'Receiver Wins'
+    elsif @hash[:A] > @hash[:B] + 1 && @hash[:A] > 3
+      'Server Wins'
+    else
+      SCORE[@hash[:A]] + ' ' + SCORE[@hash[:B]]
     end
+
   end
 
-  def server_wins
-    if @hash.empty?
-      @hash[:A] = 1
-    else
-      @hash[:A] += 1
-    end
+  def points_equal
+    @hash[:B] == @hash[:A] && @hash[:A] >= 3
   end
 
-  def receiver_wins
-    if @hash.empty?
-      @hash[:B] = 1
-    else
-      @hash[:B] += 1
-    end
+  def server_wins_point
+    @hash[:A] += 1
+  end
+
+  def receiver_wins_point
+    @hash[:B] += 1
   end
 end
